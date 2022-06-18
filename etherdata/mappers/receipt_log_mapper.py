@@ -1,6 +1,3 @@
-
-
-
 from etherdata.domain.receipt_log import EthReceiptLog
 from etherdata.utility.utils import hex_to_dec
 

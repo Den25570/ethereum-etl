@@ -1,6 +1,3 @@
-
-
-
 from etherdata.domain.receipt_log import EthReceiptLog
 from etherdata.service.token_transfer_extractor import EthTokenTransferExtractor
 

@@ -1,6 +1,3 @@
-
-
-
 from urllib.parse import urlparse
 
 from web3 import IPCProvider, HTTPProvider

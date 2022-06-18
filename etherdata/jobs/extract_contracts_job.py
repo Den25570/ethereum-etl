@@ -1,6 +1,3 @@
-
-
-
 from etherdata.domain.contract import EthContract
 from etherdata.executors.batch_work_executor import BatchWorkExecutor
 from blockchaindata.jobs.base_job import BaseJob

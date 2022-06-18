@@ -1,6 +1,3 @@
-
-
-
 from etherdata.mappers.trace_mapper import EthTraceMapper
 
 

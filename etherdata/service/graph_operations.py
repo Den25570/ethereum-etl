@@ -1,6 +1,3 @@
-
-
-
 from etherdata.utility.utils import pairwise
 
 

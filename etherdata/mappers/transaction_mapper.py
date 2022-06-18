@@ -1,6 +1,3 @@
-
-
-
 from etherdata.domain.transaction import EthTransaction
 from etherdata.utility.utils import hex_to_dec, to_normalized_address
 

@@ -1,6 +1,3 @@
-
-
-
 from etherdata.domain.receipt import EthReceipt
 from etherdata.mappers.receipt_log_mapper import EthReceiptLogMapper
 from etherdata.utility.utils import hex_to_dec, to_normalized_address

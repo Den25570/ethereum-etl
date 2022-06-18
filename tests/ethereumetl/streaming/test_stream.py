@@ -1,6 +1,8 @@
-import osimport pytest
+import os
+import pytest
 from etherdata.streaming.eth_streamer_adapter import EthStreamerAdapter
-from etherdata.utility.thread_local_proxy import ThreadLocalProxyimport tests.resources
+from etherdata.utility.thread_local_proxy import ThreadLocalProxy
+import tests.resources
 from etherdata.enumeration.entity_type import EntityType
 from blockchaindata.jobs.exporters.composite_item_exporter import CompositeItemExporter
 from blockchaindata.streaming.streamer import Streamer

@@ -1,6 +1,3 @@
-
-
-
 from etherdata.utility.progress_logger import ProgressLogger
 
 

@@ -1,6 +1,7 @@
 import pytest
 
-from etherdata.utility.web3_utils import build_web3import tests.resources
+from etherdata.utility.web3_utils import build_web3
+import tests.resources
 from etherdata.jobs.export_geth_traces_job import ExportGethTracesJob
 from etherdata.jobs.exporters.geth_traces_item_exporter import geth_traces_item_exporter
 from etherdata.utility.thread_local_proxy import ThreadLocalProxy

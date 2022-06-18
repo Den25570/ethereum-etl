@@ -1,4 +1,5 @@
-import pytestimport tests.resources
+import pytest
+import tests.resources
 from etherdata.jobs.export_contracts_job import ExportContractsJob
 from etherdata.jobs.exporters.contracts_item_exporter import contracts_item_exporter
 from etherdata.utility.thread_local_proxy import ThreadLocalProxy

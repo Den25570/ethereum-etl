@@ -1,6 +1,3 @@
-
-
-
 from etherdata.domain.contract import EthContract
 
 

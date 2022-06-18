@@ -1,6 +1,3 @@
-
-
-
 from datetime import datetime, timezone
 
 from etherdata.service.graph_operations import GraphOperations, OutOfBoundsError, Point

@@ -1,6 +1,3 @@
-
-
-
 from blockchaindata.jobs.exporters.composite_item_exporter import CompositeItemExporter
 
 RECEIPT_FIELDS_TO_EXPORT = [

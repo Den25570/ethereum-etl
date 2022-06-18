@@ -1,6 +1,3 @@
-
-
-
 from etherdata.domain.geth_trace import EthGethTrace
 
 

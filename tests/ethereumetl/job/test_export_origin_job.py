@@ -1,7 +1,8 @@
 import pytest
 import tests.resources
 
-from etherdata.utility.web3_utils import build_web3import tests.resources
+from etherdata.utility.web3_utils import build_web3
+import tests.resources
 
 from tests.ethereumetl.job.mock_ipfs_client import MockIpfsClient
 from tests.ethereumetl.job.helpers import get_web3_provider

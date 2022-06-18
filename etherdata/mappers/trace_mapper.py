@@ -1,6 +1,3 @@
-
-
-
 from etherdata.domain.trace import EthTrace
 from etherdata.utility.mainnet_daofork_state_changes import DAOFORK_BLOCK_NUMBER
 from etherdata.utility.utils import hex_to_dec, to_normalized_address
