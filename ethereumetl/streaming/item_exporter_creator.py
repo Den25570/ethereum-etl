@@ -104,14 +104,15 @@ def create_item_exporter(output, **kwargs):
             'token': 'tokens.json'})
     elif item_exporter_type == ItemExporterType.PULSAR:
         from blockchainetl.jobs.exporters.pulsar_exporter import PulsarItemExporter
-        item_exporter = PulsarItemExporter(output, kwargs['pulsar-token'], item_type_to_topic_mapping={
-            'block': kwargs['pulsar-topic'] + '/blocks',
-            'transaction': kwargs['pulsar-topic'] + '/transactions',
-            'log': kwargs['pulsar-topic'] + '/logs',
-            'token_transfer': kwargs['pulsar-topic'] + '/token-transfers',
-            'trace': kwargs['pulsar-topic'] + '/traces',
-            'contract': kwargs['pulsar-topic'] + '/contracts',
-            'token': kwargs['pulsar-topic'] + '/tokens',
+        pulsar_output, pulsar_topic, pulsar_token = output.split('|')
+        item_exporter = PulsarItemExporter(pulsar_output, pulsar_token, item_type_to_topic_mapping={
+            'block': pulsar_topic + '/blocks',
+            'transaction': pulsar_topic + '/transactions',
+            'log': pulsar_topic + '/logs',
+            'token_transfer': pulsar_topic + '/token-transfers',
+            'trace': pulsar_topic + '/traces',
+            'contract': pulsar_topic + '/contracts',
+            'token': pulsar_topic + '/tokens',
         })
     else:
         raise ValueError('Unable to determine item exporter type for output ' + output)
