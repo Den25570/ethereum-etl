@@ -1,6 +1,7 @@
 
 import logging
-import randomimport click
+import random
+import click
 from blockchaindata.streaming.streaming_utils import configure_signals, configure_logging
 from etherdata.enumeration.entity_type import EntityType
 
@@ -22,6 +23,7 @@ from etherdata.utility.thread_local_proxy import ThreadLocalProxy
                    'kafka, output name and connection host:port: kafka/127.0.0.1:9092 '
                    'S3 bucket: s3://your-aws-bucket'
                    'Pulsar topic: pulsar://localhost:6650'
+                   'Kinesis: kinesis://your-data-stream-name'
                    'If not specified will print to console')
 @click.option('-s', '--start-block', default=None, show_default=True, type=int, help='Start block')
 @click.option('-e', '--entity-types', default=','.join(EntityType.ALL_FOR_INFURA), show_default=True, type=str,

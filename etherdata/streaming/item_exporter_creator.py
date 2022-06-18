@@ -94,6 +94,11 @@ def create_item_exporter(output, **kwargs):
             'contract': pulsar_topic + '/contracts',
             'token': pulsar_topic + '/tokens',
         })
+    elif item_exporter_type == ItemExporterType.KINESIS:
+        from blockchaindata.jobs.exporters.kinesis_item_exporter import KinesisItemExporter
+        item_exporter = KinesisItemExporter(
+            stream_name=output[len('kinesis://'):],
+        )
     else:
         raise ValueError('Unable to determine item exporter type for output ' + output)
 
@@ -116,18 +121,19 @@ def determine_item_exporter_type(output):
         return ItemExporterType.PUBSUB
     if output is not None and output.startswith('kafka'):
         return ItemExporterType.KAFKA
-    elif output is not None and output.startswith('postgresql'):
+    if output is not None and output.startswith('postgresql'):
         return ItemExporterType.POSTGRES
-    elif output is not None and output.startswith('pulsar'):
+    if output is not None and output.startswith('pulsar'):
         return ItemExporterType.PULSAR
-    elif output is not None and output.startswith('gs://'):
+    if output is not None and output.startswith('gs://'):
         return ItemExporterType.GCS
-    elif output is not None and output.startswith('s3'):
+    if output is not None and output.startswith('s3'):
         return ItemExporterType.S3
-    elif output is None or output == 'console':
+    if output is not None and output.startswith('kinesis://'):
+        return ItemExporterType.KINESIS
+    if output is None or output == 'console':
         return ItemExporterType.CONSOLE
-    else:
-        return ItemExporterType.UNKNOWN
+    return ItemExporterType.UNKNOWN
 
 
 class ItemExporterType:
@@ -138,4 +144,5 @@ class ItemExporterType:
     KAFKA = 'kafka'
     S3 = 's3'
     PULSAR = 'pulsar'
+    KINESIS = 'kinesis'
     UNKNOWN = 'unknown'
