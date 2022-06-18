@@ -22,7 +22,6 @@
 
 from blockchainetl.jobs.exporters.console_item_exporter import ConsoleItemExporter
 from blockchainetl.jobs.exporters.multi_item_exporter import MultiItemExporter
-from blockchainetl.jobs.exporters.s3_item_exporter import S3ItemExporter
 
 def create_item_exporters(outputs):
     split_outputs = [output.strip() for output in outputs.split(',')] if outputs else ['console']
@@ -93,7 +92,8 @@ def create_item_exporter(output, **kwargs):
         from blockchainetl.jobs.exporters.converters.unix_timestamp_item_converter import UnixTimestampItemConverter
         from blockchainetl.jobs.exporters.converters.int_to_decimal_item_converter import IntToDecimalItemConverter
         from blockchainetl.jobs.exporters.converters.list_field_item_converter import ListFieldItemConverter
-        item_exporter = S3ItemExporter(bucket=output.split('//')[-1], converters=[UnixTimestampItemConverter()], environment=kwargs.get('environment','dev'), chain=kwargs.get('chain', 'ethereum')
+        from blockchainetl.jobs.exporters.s3_item_exporter import S3ItemExporter
+        item_exporter = S3ItemExporter(bucket=output.split('//')[-1], converters=[UnixTimestampItemConverter()],
                 , filename_mapping={'block': 'blocks.csv',
             'transaction': 'transactions.csv',
             'log': 'logs.json',
