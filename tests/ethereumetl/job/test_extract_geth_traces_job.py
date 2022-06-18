@@ -1,8 +1,8 @@
 import json
 import pytest
 import tests.resources
-from ethereumetl.jobs.exporters.traces_item_exporter import traces_item_exporter
-from ethereumetl.jobs.extract_geth_traces_job import ExtractGethTracesJob
+from etherdata.jobs.exporters.traces_item_exporter import traces_item_exporter
+from etherdata.jobs.extract_geth_traces_job import ExtractGethTracesJob
 from tests.helpers import compare_lines_ignore_order, read_file
 
 RESOURCE_GROUP = 'test_extract_geth_traces_job'

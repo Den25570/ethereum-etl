@@ -2,7 +2,7 @@ import os
 
 from web3 import HTTPProvider
 
-from ethereumetl.providers.rpc import BatchHTTPProvider
+from etherdata.providers.rpc import BatchHTTPProvider
 from tests.ethereumetl.job.mock_batch_web3_provider import MockBatchWeb3Provider
 from tests.ethereumetl.job.mock_web3_provider import MockWeb3Provider
 

@@ -1,7 +1,7 @@
 
 
 
-from ethereumetl.progress_logger import ProgressLogger
+from etherdata.utility.progress_logger import ProgressLogger
 
 
 def test_progress_logger():

@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS blocks (
+    number BIGINT,
+    hash varchar,
+    parent_hash varchar,
+    nonce varchar,
+    sha3_uncles varchar,
+    logs_bloom varchar,
+    transactions_root varchar,
+    state_root varchar,
+    receipts_root varchar,
+    miner varchar,
+    difficulty DECIMAL(38,0),
+    total_difficulty DECIMAL(38,0),
+    size BIGINT,
+    extra_data varchar,
+    gas_limit BIGINT,
+    gas_used BIGINT,
+    timestamp BIGINT,
+    transaction_count BIGINT
+);

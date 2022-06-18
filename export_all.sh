@@ -71,7 +71,7 @@ for (( batch_start_block=$start_block; batch_start_block <= $end_block; batch_st
     transactions_file=${transactions_output_dir}/transactions_${file_name_suffix}.csv
     log "Exporting blocks ${block_range} to ${blocks_file}"
     log "Exporting transactions from blocks ${block_range} to ${transactions_file}"
-    python3 ethereumetl export_blocks_and_transactions --start-block=${batch_start_block} --end-block=${batch_end_block} --provider-uri="${provider_uri}" --blocks-output=${blocks_file} --transactions-output=${transactions_file}
+    python eherdata-cli export_blocks_and_transactions --start-block=${batch_start_block} --end-block=${batch_end_block} --provider-uri="${provider_uri}" --blocks-output=${blocks_file} --transactions-output=${transactions_file}
     quit_if_returned_error
 
     ### token_transfers
@@ -81,7 +81,7 @@ for (( batch_start_block=$start_block; batch_start_block <= $end_block; batch_st
 
     token_transfers_file=${token_transfers_output_dir}/token_transfers_${file_name_suffix}.csv
     log "Exporting ERC20 transfers from blocks ${block_range} to ${token_transfers_file}"
-    python3 ethereumetl export_token_transfers --start-block=${batch_start_block} --end-block=${batch_end_block} --provider-uri="${provider_uri}" --output=${token_transfers_file}
+    python eherdata-cli export_token_transfers --start-block=${batch_start_block} --end-block=${batch_end_block} --provider-uri="${provider_uri}" --output=${token_transfers_file}
     quit_if_returned_error
 
     ### receipts_and_logs
@@ -91,7 +91,7 @@ for (( batch_start_block=$start_block; batch_start_block <= $end_block; batch_st
 
     transaction_hashes_file=${transaction_hashes_output_dir}/transaction_hashes_${file_name_suffix}.csv
     log "Extracting hash column from transaction file ${transactions_file}"
-    python3 ethereumetl extract_csv_column --input ${transactions_file} --output ${transaction_hashes_file} --column "hash"
+    python eherdata-cli extract_csv_column --input ${transactions_file} --output ${transaction_hashes_file} --column "hash"
     quit_if_returned_error
 
     receipts_output_dir=${output_dir}/receipts${partition_dir}
@@ -103,7 +103,7 @@ for (( batch_start_block=$start_block; batch_start_block <= $end_block; batch_st
     receipts_file=${receipts_output_dir}/receipts_${file_name_suffix}.csv
     logs_file=${logs_output_dir}/logs_${file_name_suffix}.csv
     log "Exporting receipts and logs from blocks ${block_range} to ${receipts_file} and ${logs_file}"
-    python3 ethereumetl export_receipts_and_logs --transaction-hashes ${transaction_hashes_file} --provider-uri="${provider_uri}"  --receipts-output=${receipts_file} --logs-output=${logs_file}
+    python eherdata-cli export_receipts_and_logs --transaction-hashes ${transaction_hashes_file} --provider-uri="${provider_uri}"  --receipts-output=${receipts_file} --logs-output=${logs_file}
     quit_if_returned_error
 
     ### contracts
@@ -113,7 +113,7 @@ for (( batch_start_block=$start_block; batch_start_block <= $end_block; batch_st
 
     contract_addresses_file=${contract_addresses_output_dir}/contract_addresses_${file_name_suffix}.csv
     log "Extracting contract_address from receipt file ${receipts_file}"
-    python3 ethereumetl extract_csv_column --input ${receipts_file} --column contract_address --output ${contract_addresses_file}
+    python eherdata-cli extract_csv_column --input ${receipts_file} --column contract_address --output ${contract_addresses_file}
     quit_if_returned_error
 
     contracts_output_dir=${output_dir}/contracts${partition_dir}
@@ -121,7 +121,7 @@ for (( batch_start_block=$start_block; batch_start_block <= $end_block; batch_st
 
     contracts_file=${contracts_output_dir}/contracts_${file_name_suffix}.csv
     log "Exporting contracts from blocks ${block_range} to ${contracts_file}"
-    python3 ethereumetl export_contracts --contract-addresses ${contract_addresses_file} --provider-uri="${provider_uri}" --output=${contracts_file}
+    python eherdata-cli export_contracts --contract-addresses ${contract_addresses_file} --provider-uri="${provider_uri}" --output=${contracts_file}
     quit_if_returned_error
 
     ### tokens
@@ -131,7 +131,7 @@ for (( batch_start_block=$start_block; batch_start_block <= $end_block; batch_st
 
     token_addresses_file=${token_addresses_output_dir}/token_addresses_${file_name_suffix}
     log "Extracting token_address from token_transfers file ${token_transfers_file}"
-    python3 ethereumetl extract_csv_column -i ${token_transfers_file} -c token_address -o - | sort | uniq > ${token_addresses_file}
+    python eherdata-cli extract_csv_column -i ${token_transfers_file} -c token_address -o - | sort | uniq > ${token_addresses_file}
     quit_if_returned_error
 
     tokens_output_dir=${output_dir}/tokens${partition_dir}
@@ -139,7 +139,7 @@ for (( batch_start_block=$start_block; batch_start_block <= $end_block; batch_st
 
     tokens_file=${tokens_output_dir}/tokens_${file_name_suffix}.csv
     log "Exporting tokens from blocks ${block_range} to ${tokens_file}"
-    python3 ethereumetl export_tokens --token-addresses ${token_addresses_file} --provider-uri="${provider_uri}" --output ${tokens_file}
+    python eherdata-cli export_tokens --token-addresses ${token_addresses_file} --provider-uri="${provider_uri}" --output ${tokens_file}
     quit_if_returned_error
 
     end_time=$(date +%s)

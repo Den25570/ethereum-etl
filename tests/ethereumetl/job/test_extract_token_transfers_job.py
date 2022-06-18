@@ -1,13 +1,7 @@
-
-
-import csv
-import io
-
-import pytest
-
+import csvimportimport
 import tests.resources
-from ethereumetl.jobs.exporters.token_transfers_item_exporter import token_transfers_item_exporter
-from ethereumetl.jobs.extract_token_transfers_job import ExtractTokenTransfersJob
+from etherdata.jobs.exporters.token_transfers_item_exporter import token_transfers_item_exporter
+from etherdata.jobs.extract_token_transfers_job import ExtractTokenTransfersJob
 from tests.helpers import compare_lines_ignore_order, read_file
 
 RESOURCE_GROUP = 'test_extract_token_transfers_job'

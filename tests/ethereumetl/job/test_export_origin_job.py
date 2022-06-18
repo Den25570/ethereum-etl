@@ -1,18 +1,16 @@
 import pytest
 import tests.resources
 
-from ethereumetl.web3_utils import build_web3
-
-import tests.resources
+from etherdata.utility.web3_utils import build_web3import tests.resources
 
 from tests.ethereumetl.job.mock_ipfs_client import MockIpfsClient
 from tests.ethereumetl.job.helpers import get_web3_provider
 from tests.helpers import compare_lines_ignore_order, read_file, skip_if_slow_tests_disabled
 
-from ethereumetl.jobs.export_origin_job import ExportOriginJob
-from ethereumetl.jobs.exporters.origin_exporter import origin_marketplace_listing_item_exporter, origin_shop_product_item_exporter
-from ethereumetl.ipfs.origin import get_origin_ipfs_client
-from ethereumetl.thread_local_proxy import ThreadLocalProxy
+from etherdata.jobs.export_origin_job import ExportOriginJob
+from etherdata.jobs.exporters.origin_exporter import origin_marketplace_listing_item_exporter, origin_shop_product_item_exporter
+from etherdata.ipfs.origin import get_origin_ipfs_client
+from etherdata.utility.thread_local_proxy import ThreadLocalProxy
 
 RESOURCE_GROUP = 'test_export_origin_job'
 

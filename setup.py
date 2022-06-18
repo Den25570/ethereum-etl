@@ -41,15 +41,5 @@ setup(
         'dev': [
             'pytest~=4.3.0'
         ]
-    },
-    entry_points={
-        'console_scripts': [
-            'ethereumetl=ethereumetl.cli:cli',
-        ],
-    },
-    project_urls={
-        'Bug Reports': 'https://github.com/blockchain-etl/ethereum-etl/issues',
-        'Chat': 'https://gitter.im/ethereum-etl/Lobby',
-        'Source': 'https://github.com/blockchain-etl/ethereum-etl',
-    },
+    }
 )

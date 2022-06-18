@@ -1,8 +1,8 @@
 
 
 
-from ethereumetl.domain.receipt_log import EthReceiptLog
-from ethereumetl.service.token_transfer_extractor import EthTokenTransferExtractor
+from etherdata.domain.receipt_log import EthReceiptLog
+from etherdata.service.token_transfer_extractor import EthTokenTransferExtractor
 
 token_transfer_extractor = EthTokenTransferExtractor()
 

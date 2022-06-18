@@ -1,9 +1,6 @@
-
-
-
 import pytest
 
-from ethereumetl.service.eth_contract_service import EthContractService
+from etherdata.service.eth_contract_service import EthContractService
 
 
 @pytest.mark.parametrize("bytecode,expected_sighashes,is_erc20,is_erc721", [

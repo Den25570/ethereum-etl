@@ -1,0 +1,132 @@
+
+
+from sqlalchemy import Table, Column, Integer, BigInteger, Boolean, String, Numeric, \
+    MetaData, PrimaryKeyConstraint, VARCHAR, TIMESTAMP
+from sqlalchemy.dialects.postgresql import ARRAY
+
+metadata = MetaData()
+
+BLOCKS = Table(
+    'blocks', metadata,
+    Column('timestamp', TIMESTAMP),
+    Column('number', BigInteger),
+    Column('hash', String, primary_key=True),
+    Column('parent_hash', String),
+    Column('nonce', String),
+    Column('sha3_uncles', String),
+    Column('logs_bloom', String),
+    Column('transactions_root', String),
+    Column('state_root', String),
+    Column('receipts_root', String),
+    Column('miner', String),
+    Column('difficulty', Numeric(38)),
+    Column('total_difficulty', Numeric(38)),
+    Column('size', BigInteger),
+    Column('extra_data', String),
+    Column('gas_limit', BigInteger),
+    Column('gas_used', BigInteger),
+    Column('transaction_count', BigInteger),
+    Column('base_fee_per_gas', BigInteger),
+)
+
+TRANSACTIONS = Table(
+    'transactions', metadata,
+    Column('hash', String, primary_key=True),
+    Column('nonce', BigInteger),
+    Column('transaction_index', BigInteger),
+    Column('from_address', String),
+    Column('to_address', String),
+    Column('value', Numeric(38)),
+    Column('gas', BigInteger),
+    Column('gas_price', BigInteger),
+    Column('input', String),
+    Column('receipt_cumulative_gas_used', BigInteger),
+    Column('receipt_gas_used', BigInteger),
+    Column('receipt_contract_address', String),
+    Column('receipt_root', String),
+    Column('receipt_status', BigInteger),
+    Column('block_timestamp', TIMESTAMP),
+    Column('block_number', BigInteger),
+    Column('block_hash', String),
+    Column('max_fee_per_gas', BigInteger),
+    Column('max_priority_fee_per_gas', BigInteger),
+    Column('transaction_type', BigInteger),
+    Column('receipt_effective_gas_price', BigInteger),
+)
+
+LOGS = Table(
+    'logs', metadata,
+    Column('log_index', BigInteger, primary_key=True),
+    Column('transaction_hash', String, primary_key=True),
+    Column('transaction_index', BigInteger),
+    Column('address', String),
+    Column('data', String),
+    Column('topic0', String),
+    Column('topic1', String),
+    Column('topic2', String),
+    Column('topic3', String),
+    Column('block_timestamp', TIMESTAMP),
+    Column('block_number', BigInteger),
+    Column('block_hash', String),
+)
+
+TOKEN_TRANSFERS = Table(
+    'token_transfers', metadata,
+    Column('token_address', String),
+    Column('from_address', String),
+    Column('to_address', String),
+    Column('value', Numeric(78)),
+    Column('transaction_hash', String, primary_key=True),
+    Column('log_index', BigInteger, primary_key=True),
+    Column('block_timestamp', TIMESTAMP),
+    Column('block_number', BigInteger),
+    Column('block_hash', String),
+)
+
+TRACES = Table(
+    'traces', metadata,
+    Column('transaction_hash', String),
+    Column('transaction_index', BigInteger),
+    Column('from_address', String),
+    Column('to_address', String),
+    Column('value', Numeric(38)),
+    Column('input', String),
+    Column('output', String),
+    Column('trace_type', String),
+    Column('call_type', String),
+    Column('reward_type', String),
+    Column('gas', BigInteger),
+    Column('gas_used', BigInteger),
+    Column('subtraces', BigInteger),
+    Column('trace_address', String),
+    Column('error', String),
+    Column('status', Integer),
+    Column('block_timestamp', TIMESTAMP),
+    Column('block_number', BigInteger),
+    Column('block_hash', String),
+    Column('trace_id', String, primary_key=True),
+)
+
+TOKENS = Table(
+    'tokens', metadata,
+    Column('address', VARCHAR(42)),
+    Column('name', String),
+    Column('symbol', String),
+    Column('decimals', Integer),
+    Column('function_sighashes', ARRAY(String)),
+    Column('total_supply', Numeric(78)),
+    Column('block_number', BigInteger),
+    PrimaryKeyConstraint('address', 'block_number', name='tokens_pk'),
+)
+
+CONTRACTS = Table(
+    'contracts', metadata,
+    Column('address', VARCHAR(42)),
+    Column('bytecode', String),
+    Column('function_sighashes', ARRAY(String)),
+    Column('is_erc20', Boolean),
+    Column('is_erc721', Boolean),
+    Column('is_erc1155', Boolean),
+    Column('block_number', BigInteger),
+    PrimaryKeyConstraint('address', 'block_number', name='contracts_pk'),
+)

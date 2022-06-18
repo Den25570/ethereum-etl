@@ -1,6 +1,3 @@
-
-
-
 import json
 
 from tests.ethereumetl.job.mock_web3_provider import MockWeb3Provider, build_file_name

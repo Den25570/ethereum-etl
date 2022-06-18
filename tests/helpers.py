@@ -1,10 +1,5 @@
-
-
-
 import os
-import json
-
-import pytest
+import jsonimport pytest
 
 
 def sort_json(json_string):

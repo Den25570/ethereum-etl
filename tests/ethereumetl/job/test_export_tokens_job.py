@@ -1,13 +1,8 @@
-
-
-
 import pytest
-from ethereumetl.web3_utils import build_web3
-
-import tests.resources
-from ethereumetl.jobs.export_tokens_job import ExportTokensJob
-from ethereumetl.jobs.exporters.tokens_item_exporter import tokens_item_exporter
-from ethereumetl.thread_local_proxy import ThreadLocalProxy
+from etherdata.utility.web3_utils import build_web3import tests.resources
+from etherdata.jobs.export_tokens_job import ExportTokensJob
+from etherdata.jobs.exporters.tokens_item_exporter import tokens_item_exporter
+from etherdata.utility.thread_local_proxy import ThreadLocalProxy
 from tests.ethereumetl.job.helpers import get_web3_provider
 from tests.helpers import compare_lines_ignore_order, read_file, skip_if_slow_tests_disabled
 
