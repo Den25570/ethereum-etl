@@ -23,10 +23,10 @@
 from blockchainetl.jobs.exporters.console_item_exporter import ConsoleItemExporter
 from blockchainetl.jobs.exporters.multi_item_exporter import MultiItemExporter
 
-def create_item_exporters(outputs):
+def create_item_exporters(outputs, **kwargs):
     split_outputs = [output.strip() for output in outputs.split(',')] if outputs else ['console']
 
-    item_exporters = [create_item_exporter(output) for output in split_outputs]
+    item_exporters = [create_item_exporter(output, kwargs) for output in split_outputs]
     return MultiItemExporter(item_exporters)
 
 
@@ -57,7 +57,8 @@ def create_item_exporter(output, **kwargs):
         from blockchainetl.jobs.exporters.converters.unix_timestamp_item_converter import UnixTimestampItemConverter
         from blockchainetl.jobs.exporters.converters.int_to_decimal_item_converter import IntToDecimalItemConverter
         from blockchainetl.jobs.exporters.converters.list_field_item_converter import ListFieldItemConverter
-        from ethereumetl.streaming.postgres_tables import BLOCKS, TRANSACTIONS, LOGS, TOKEN_TRANSFERS, TRACES, TOKENS, CONTRACTS
+        from ethereumetl.streaming.postgres_tables import BLOCKS, TRANSACTIONS, LOGS, TOKEN_TRANSFERS, TRACES, TOKENS, \
+            CONTRACTS
 
         item_exporter = PostgresItemExporter(
             output, item_type_to_insert_stmt_mapping={
@@ -93,14 +94,25 @@ def create_item_exporter(output, **kwargs):
         from blockchainetl.jobs.exporters.converters.int_to_decimal_item_converter import IntToDecimalItemConverter
         from blockchainetl.jobs.exporters.converters.list_field_item_converter import ListFieldItemConverter
         from blockchainetl.jobs.exporters.s3_item_exporter import S3ItemExporter
-        item_exporter = S3ItemExporter(bucket=output.split('//')[-1], converters=[UnixTimestampItemConverter()],
-                , filename_mapping={'block': 'blocks.csv',
+        item_exporter = S3ItemExporter(bucket=output.split('//')[-1], converters=[UnixTimestampItemConverter()], filename_mapping={
+            'block': 'blocks.csv',
             'transaction': 'transactions.csv',
             'log': 'logs.json',
             'token_transfer': 'token_transfers.csv',
             'trace': 'traces.csv',
             'contract':  'contracts.json',
             'token': 'tokens.json'})
+    elif item_exporter_type == ItemExporterType.PULSAR:
+        from blockchainetl.jobs.exporters.pulsar_exporter import PulsarItemExporter
+        item_exporter = PulsarItemExporter(output, kwargs['pulsar-token'], item_type_to_topic_mapping={
+            'block': kwargs['pulsar-topic'] + '/blocks',
+            'transaction': kwargs['pulsar-topic'] + '/transactions',
+            'log': kwargs['pulsar-topic'] + '/logs',
+            'token_transfer': kwargs['pulsar-topic'] + '/token-transfers',
+            'trace': kwargs['pulsar-topic'] + '/traces',
+            'contract': kwargs['pulsar-topic'] + '/contracts',
+            'token': kwargs['pulsar-topic'] + '/tokens',
+        })
     else:
         raise ValueError('Unable to determine item exporter type for output ' + output)
 
@@ -125,6 +137,8 @@ def determine_item_exporter_type(output):
         return ItemExporterType.KAFKA
     elif output is not None and output.startswith('postgresql'):
         return ItemExporterType.POSTGRES
+    elif output is not None and output.startswith('pulsar'):
+        return ItemExporterType.PULSAR
     elif output is not None and output.startswith('gs://'):
         return ItemExporterType.GCS
     elif output is not None and output.startswith('s3'):
@@ -142,4 +156,5 @@ class ItemExporterType:
     CONSOLE = 'console'
     KAFKA = 'kafka'
     S3 = 's3'
+    PULSAR = 'pulsar'
     UNKNOWN = 'unknown'

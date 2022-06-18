@@ -38,10 +38,12 @@ from ethereumetl.thread_local_proxy import ThreadLocalProxy
               help='The URI of the web3 provider e.g. '
                    'file://$HOME/Library/Ethereum/geth.ipc or https://mainnet.infura.io')
 @click.option('-o', '--output', type=str,
-              help='Either Google PubSub topic path e.g. projects/your-project/topics/crypto_ethereum; '
-                   'or Postgres connection url e.g. postgresql+pg8000://postgres:admin@127.0.0.1:5432/ethereum; '
-                   'or GCS bucket e.g. gs://your-bucket-name; '
-                   'or kafka, output name and connection host:port e.g. kafka/127.0.0.1:9092 '
+              help='Google PubSub topic path: projects/your-project/topics/crypto_ethereum; '
+                   'Postgres connection url: postgresql+pg8000://postgres:admin@127.0.0.1:5432/ethereum; '
+                   'GCS bucket: gs://your-bucket-name; '
+                   'kafka, output name and connection host:port: kafka/127.0.0.1:9092 '
+                   'S3: s3://your-aws-bucket'
+                   'Pulsar: pulsar://localhost:6650'
                    'If not specified will print to console')
 @click.option('-s', '--start-block', default=None, show_default=True, type=int, help='Start block')
 @click.option('-e', '--entity-types', default=','.join(EntityType.ALL_FOR_INFURA), show_default=True, type=str,
@@ -52,11 +54,8 @@ from ethereumetl.thread_local_proxy import ThreadLocalProxy
 @click.option('-w', '--max-workers', default=5, show_default=True, type=int, help='The number of workers')
 @click.option('--log-file', default=None, show_default=True, type=str, help='Log file')
 @click.option('--pid-file', default=None, show_default=True, type=str, help='pid file')
-@click.option('--environment', default='dev', show_default=True, type=str, help='Environmet: dev / prod')
-@click.option('--chain', default='ethereum', show_default=True, type=str, help='Blockchain')
 def stream(last_synced_block_file, lag, provider_uri, output, start_block, entity_types,
            period_seconds=10, batch_size=2, block_batch_size=10, max_workers=5, log_file=None, pid_file=None, environment=None, chain=None):
-    """Streams all data types to console or Google Pub/Sub or AWS S3"""
     configure_logging(log_file)
     configure_signals()
     entity_types = parse_entity_types(entity_types)
@@ -70,7 +69,7 @@ def stream(last_synced_block_file, lag, provider_uri, output, start_block, entit
 
     streamer_adapter = EthStreamerAdapter(
         batch_web3_provider=ThreadLocalProxy(lambda: get_provider_from_uri(provider_uri, batch=True)),
-        item_exporter=create_item_exporters(output, environment=environment, chain=chain),
+        item_exporter=create_item_exporters(output),
         batch_size=batch_size,
         max_workers=max_workers,
         entity_types=entity_types
