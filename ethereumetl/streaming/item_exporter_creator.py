@@ -22,7 +22,7 @@
 
 from blockchainetl.jobs.exporters.console_item_exporter import ConsoleItemExporter
 from blockchainetl.jobs.exporters.multi_item_exporter import MultiItemExporter
-
+from blockchainetl.jobs.exporters.s3_item_exporter import S3ItemExporter
 
 def create_item_exporters(outputs):
     split_outputs = [output.strip() for output in outputs.split(',')] if outputs else ['console']
@@ -31,7 +31,8 @@ def create_item_exporters(outputs):
     return MultiItemExporter(item_exporters)
 
 
-def create_item_exporter(output):
+
+def create_item_exporter(output, **kwargs):
     item_exporter_type = determine_item_exporter_type(output)
     if item_exporter_type == ItemExporterType.PUBSUB:
         from blockchainetl.jobs.exporters.google_pubsub_item_exporter import GooglePubSubItemExporter
@@ -88,7 +89,18 @@ def create_item_exporter(output):
             'contract': 'contracts',
             'token': 'tokens',
         })
-
+    elif item_exporter_type == ItemExporterType.S3:
+        from blockchainetl.jobs.exporters.converters.unix_timestamp_item_converter import UnixTimestampItemConverter
+        from blockchainetl.jobs.exporters.converters.int_to_decimal_item_converter import IntToDecimalItemConverter
+        from blockchainetl.jobs.exporters.converters.list_field_item_converter import ListFieldItemConverter
+        item_exporter = S3ItemExporter(bucket=output.split('//')[-1], converters=[UnixTimestampItemConverter()], environment=kwargs.get('environment','dev'), chain=kwargs.get('chain', 'ethereum')
+                , filename_mapping={'block': 'blocks.csv',
+            'transaction': 'transactions.csv',
+            'log': 'logs.json',
+            'token_transfer': 'token_transfers.csv',
+            'trace': 'traces.csv',
+            'contract':  'contracts.json',
+            'token': 'tokens.json'})
     else:
         raise ValueError('Unable to determine item exporter type for output ' + output)
 
@@ -115,6 +127,8 @@ def determine_item_exporter_type(output):
         return ItemExporterType.POSTGRES
     elif output is not None and output.startswith('gs://'):
         return ItemExporterType.GCS
+    elif output is not None and output.startswith('s3'):
+        return ItemExporterType.S3
     elif output is None or output == 'console':
         return ItemExporterType.CONSOLE
     else:
@@ -127,4 +141,5 @@ class ItemExporterType:
     GCS = 'gcs'
     CONSOLE = 'console'
     KAFKA = 'kafka'
+    S3 = 's3'
     UNKNOWN = 'unknown'
