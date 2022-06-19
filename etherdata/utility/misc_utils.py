@@ -1,6 +1,7 @@
 import contextlib
 import csv
-import jsonimport six
+import json
+import six
 
 from etherdata.utility.csv_utils import set_max_field_size_limit
 from blockchaindata.utility.file_utils import get_file_handle, smart_open

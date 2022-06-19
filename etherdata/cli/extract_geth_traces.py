@@ -1,6 +1,7 @@
 
 import csv
-import jsonimport click
+import json
+import click
 
 from blockchaindata.utility.file_utils import smart_open
 from etherdata.jobs.exporters.traces_item_exporter import traces_item_exporter

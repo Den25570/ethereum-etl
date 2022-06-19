@@ -1,4 +1,4 @@
-import csvimportimport
+import csv
 import tests.resources
 from etherdata.jobs.exporters.token_transfers_item_exporter import token_transfers_item_exporter
 from etherdata.jobs.extract_token_transfers_job import ExtractTokenTransfersJob

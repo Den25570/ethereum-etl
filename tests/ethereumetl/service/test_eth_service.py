@@ -1,5 +1,6 @@
 
-import osimport pytest
+import os
+import pytest
 from dateutil.parser import parse
 from web3 import HTTPProvider, Web3
 

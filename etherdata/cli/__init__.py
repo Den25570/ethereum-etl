@@ -1,13 +1,15 @@
 
 
 from blockchaindata.utility.logging_utils import logging_basic_config
-logging_basic_config()import click
+logging_basic_config()
 
+import click
+
+from etherdata.cli.calculate_tvl import calculate_tvl
 from etherdata.cli.export_all import export_all
 from etherdata.cli.export_blocks_and_transactions import export_blocks_and_transactions
 from etherdata.cli.export_contracts import export_contracts
 from etherdata.cli.export_geth_traces import export_geth_traces
-from etherdata.cli.export_origin import export_origin
 from etherdata.cli.export_receipts_and_logs import export_receipts_and_logs
 from etherdata.cli.export_token_transfers import export_token_transfers
 from etherdata.cli.export_tokens import export_tokens
@@ -35,7 +37,7 @@ def cli(ctx):
 # export
 cli.add_command(export_all, "export_all")
 cli.add_command(export_blocks_and_transactions, "export_blocks_and_transactions")
-cli.add_command(export_origin, "export_origin")
+cli.add_command(calculate_tvl, "calculate_tvl")
 cli.add_command(export_receipts_and_logs, "export_receipts_and_logs")
 cli.add_command(export_token_transfers, "export_token_transfers")
 cli.add_command(extract_token_transfers, "extract_token_transfers")

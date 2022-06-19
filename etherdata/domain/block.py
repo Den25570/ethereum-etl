@@ -1,6 +1,3 @@
-
-
-
 class EthBlock(object):
     def __init__(self):
         self.number = None

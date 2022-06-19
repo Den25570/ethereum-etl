@@ -1,5 +1,6 @@
 import csv
-import jsonimport click
+import json
+import click
 from blockchaindata.utility.csv_utils import set_max_field_size_limit
 from blockchaindata.utility.file_utils import smart_open
 from etherdata.jobs.exporters.contracts_item_exporter import contracts_item_exporter

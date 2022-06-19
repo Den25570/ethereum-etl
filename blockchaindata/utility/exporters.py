@@ -1,7 +1,8 @@
 import csv
 import io
 import threading
-from json import JSONEncoderimport decimal
+from json import JSONEncoder
+import decimal
 import six
 
 

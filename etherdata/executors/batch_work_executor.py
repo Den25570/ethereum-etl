@@ -28,11 +28,11 @@ class BatchWorkExecutor:
         self.executor = FailSafeExecutor(BoundedExecutor(1, self.max_workers))
         self.retry_exceptions = retry_exceptions
         self.max_retries = max_retries
-        self.utility.progress_logger = ProgressLogger()
+        self.progress_logger = ProgressLogger()
         self.logger = logging.getLogger('BatchWorkExecutor')
 
     def execute(self, work_iterable, work_handler, total_items=None):
-        self.utility.progress_logger.start(total_items=total_items)
+        self.progress_logger.start(total_items=total_items)
         for batch in dynamic_batch_iterator(work_iterable, lambda: self.batch_size):
             self.executor.submit(self._fail_safe_execute, work_handler, batch)
 
@@ -48,7 +48,7 @@ class BatchWorkExecutor:
                 execute_with_retries(work_handler, [item],
                                      max_retries=self.max_retries, retry_exceptions=self.retry_exceptions)
 
-        self.utility.progress_logger.track(len(batch))
+        self.progress_logger.track(len(batch))
 
     # Some acceptable race conditions are possible
     def _try_decrease_batch_size(self, current_batch_size):
@@ -73,7 +73,7 @@ class BatchWorkExecutor:
 
     def shutdown(self):
         self.executor.shutdown()
-        self.utility.progress_logger.finish()
+        self.progress_logger.finish()
 
 
 def execute_with_retries(func, *args, max_retries=5, retry_exceptions=RETRY_EXCEPTIONS, sleep_seconds=1):

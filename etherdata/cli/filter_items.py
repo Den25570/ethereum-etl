@@ -1,6 +1,6 @@
 import click
 
-from etherdata import misc_utils
+from etherdata.utility import misc_utils
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))

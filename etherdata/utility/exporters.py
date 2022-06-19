@@ -1,7 +1,8 @@
 import csv
 import io
 import threading
-from json import JSONEncoderimport six
+from json import JSONEncoder
+import six
 
 
 class BaseItemExporter(object):
