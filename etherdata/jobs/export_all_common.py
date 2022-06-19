@@ -19,6 +19,7 @@ from etherdata.jobs.exporters.tokens_item_exporter import tokens_item_exporter
 from etherdata.providers.auto import get_provider_from_uri
 from etherdata.utility.thread_local_proxy import ThreadLocalProxy
 from etherdata.utility.web3_utils import build_web3
+from axel import Event
 
 logger = logging.getLogger('export_all')
 

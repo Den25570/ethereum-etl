@@ -6,7 +6,7 @@ from etherdata.mappers.token_transfer_mapper import EthTokenTransferMapper
 from etherdata.mappers.receipt_log_mapper import EthReceiptLogMapper
 from etherdata.service.token_transfer_extractor import EthTokenTransferExtractor, TRANSFER_EVENT_TOPIC
 from etherdata.utility.utils import validate_range
-
+from axel import Event
 
 class ExportTokenTransfersJob(BaseJob):
     def __init__(
@@ -32,6 +32,13 @@ class ExportTokenTransfersJob(BaseJob):
         self.token_transfer_mapper = EthTokenTransferMapper()
         self.token_transfer_extractor = EthTokenTransferExtractor()
 
+        self.export_all = Event(self)
+        self.load_all = Event(self)
+        self.transform_all = Event(self)
+        self.export = Event(self)
+        self.load = Event(self)
+        self.transform = Event(self)
+
     def _start(self):
         self.item_exporter.open()
 
@@ -41,6 +48,7 @@ class ExportTokenTransfersJob(BaseJob):
             self._export_batch,
             total_items=self.end_block - self.start_block + 1
         )
+        self.export_all('export_token_transfers')
 
     def _export_batch(self, block_number_batch):
         assert len(block_number_batch) > 0

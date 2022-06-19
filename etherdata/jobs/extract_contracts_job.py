@@ -5,7 +5,7 @@ from etherdata.mappers.contract_mapper import EthContractMapper
 
 from etherdata.service.eth_contract_service import EthContractService
 from etherdata.utility.utils import to_int_or_none
-
+from axel import Event
 
 # Extract contracts
 class ExtractContractsJob(BaseJob):
@@ -23,11 +23,19 @@ class ExtractContractsJob(BaseJob):
         self.contract_service = EthContractService()
         self.contract_mapper = EthContractMapper()
 
+        self.export_all = Event(self)
+        self.load_all = Event(self)
+        self.transform_all = Event(self)
+        self.export = Event(self)
+        self.load = Event(self)
+        self.transform = Event(self)
+
     def _start(self):
         self.item_exporter.open()
 
     def _export(self):
         self.batch_work_executor.execute(self.traces_iterable, self._extract_contracts)
+        self.export_all('extract_contracts')
 
     def _extract_contracts(self, traces):
         for trace in traces:
@@ -55,8 +63,11 @@ class ExtractContractsJob(BaseJob):
 
             contracts.append(contract)
 
+        self.transform_all('extract_contracts')
+
         for contract in contracts:
             self.item_exporter.export_item(self.contract_mapper.contract_to_dict(contract))
+            self.export('extract_contracts')
 
     def _end(self):
         self.batch_work_executor.shutdown()

@@ -2,7 +2,7 @@ from etherdata.executors.batch_work_executor import BatchWorkExecutor
 from blockchaindata.jobs.base_job import BaseJob
 from etherdata.mappers.token_mapper import EthTokenMapper
 from etherdata.service.eth_token_service import EthTokenService
-
+from axel import Event
 
 class ExportTokensJob(BaseJob):
     def __init__(self, web3, item_exporter, token_addresses_iterable, max_workers):
@@ -13,11 +13,19 @@ class ExportTokensJob(BaseJob):
         self.token_service = EthTokenService(web3, clean_user_provided_content)
         self.token_mapper = EthTokenMapper()
 
+        self.export_all = Event(self)
+        self.load_all = Event(self)
+        self.transform_all = Event(self)
+        self.export = Event(self)
+        self.load = Event(self)
+        self.transform = Event(self)
+
     def _start(self):
         self.item_exporter.open()
 
     def _export(self):
         self.batch_work_executor.execute(self.token_addresses_iterable, self._export_tokens)
+        self.export_all('extract_tokens')
 
     def _export_tokens(self, token_addresses):
         for token_address in token_addresses:

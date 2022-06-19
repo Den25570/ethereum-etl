@@ -1,11 +1,9 @@
-
-
 from etherdata.executors.batch_work_executor import BatchWorkExecutor
 from blockchaindata.jobs.base_job import BaseJob
 from etherdata.mappers.token_transfer_mapper import EthTokenTransferMapper
 from etherdata.mappers.receipt_log_mapper import EthReceiptLogMapper
 from etherdata.service.token_transfer_extractor import EthTokenTransferExtractor
-
+from axel import Event
 
 class ExtractTokenTransfersJob(BaseJob):
     def __init__(
@@ -23,11 +21,19 @@ class ExtractTokenTransfersJob(BaseJob):
         self.token_transfer_mapper = EthTokenTransferMapper()
         self.token_transfer_extractor = EthTokenTransferExtractor()
 
+        self.export_all = Event(self)
+        self.load_all = Event(self)
+        self.transform_all = Event(self)
+        self.export = Event(self)
+        self.load = Event(self)
+        self.transform = Event(self)
+
     def _start(self):
         self.item_exporter.open()
 
     def _export(self):
         self.batch_work_executor.execute(self.logs_iterable, self._extract_transfers)
+        self.export_all('extract_token_transfers')
 
     def _extract_transfers(self, log_dicts):
         for log_dict in log_dicts:

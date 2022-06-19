@@ -1,10 +1,8 @@
-
-
 from etherdata.executors.batch_work_executor import BatchWorkExecutor
 from blockchaindata.jobs.base_job import BaseJob
 from etherdata.mappers.trace_mapper import EthTraceMapper
 from etherdata.mappers.geth_trace_mapper import EthGethTraceMapper
-
+from axel import Event
 
 class ExtractGethTracesJob(BaseJob):
     def __init__(
@@ -21,11 +19,19 @@ class ExtractGethTracesJob(BaseJob):
         self.trace_mapper = EthTraceMapper()
         self.geth_trace_mapper = EthGethTraceMapper()
 
+        self.export_all = Event(self)
+        self.load_all = Event(self)
+        self.transform_all = Event(self)
+        self.export = Event(self)
+        self.load = Event(self)
+        self.transform = Event(self)
+
     def _start(self):
         self.item_exporter.open()
 
     def _export(self):
         self.batch_work_executor.execute(self.traces_iterable, self._extract_geth_traces)
+        self.export_all('extract_geth_traces')
 
     def _extract_geth_traces(self, geth_traces):
         for geth_trace_dict in geth_traces:

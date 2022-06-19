@@ -7,7 +7,7 @@ from etherdata.mappers.contract_mapper import EthContractMapper
 
 from etherdata.service.eth_contract_service import EthContractService
 from etherdata.utility.utils import rpc_response_to_result
-
+from axel import Event
 
 # Exports contracts bytecode
 class ExportContractsJob(BaseJob):
@@ -27,11 +27,19 @@ class ExportContractsJob(BaseJob):
         self.contract_service = EthContractService()
         self.contract_mapper = EthContractMapper()
 
+        self.export_all = Event(self)
+        self.load_all = Event(self)
+        self.transform_all = Event(self)
+        self.export = Event(self)
+        self.load = Event(self)
+        self.transform = Event(self)
+
     def _start(self):
         self.item_exporter.open()
 
     def _export(self):
         self.batch_work_executor.execute(self.contract_addresses_iterable, self._export_contracts)
+        self.export_all('export_contracts')
 
     def _export_contracts(self, contract_addresses):
         contracts_code_rpc = list(generate_get_code_json_rpc(contract_addresses))
@@ -46,6 +54,8 @@ class ExportContractsJob(BaseJob):
             contract_address = contract_addresses[request_id]
             contract = self._get_contract(contract_address, result)
             contracts.append(contract)
+
+        self.load_all('export_contracts')
 
         for contract in contracts:
             self.item_exporter.export_item(self.contract_mapper.contract_to_dict(contract))

@@ -5,6 +5,7 @@ from etherdata.utility.json_rpc_requests import generate_trace_block_by_number_j
 from blockchaindata.jobs.base_job import BaseJob
 from etherdata.mappers.geth_trace_mapper import EthGethTraceMapper
 from etherdata.utility.utils import validate_range, rpc_response_to_result
+from axel import Event
 
 
 # Exports geth traces
@@ -28,6 +29,13 @@ class ExportGethTracesJob(BaseJob):
 
         self.geth_trace_mapper = EthGethTraceMapper()
 
+        self.export_all = Event(self)
+        self.load_all = Event(self)
+        self.transform_all = Event(self)
+        self.export = Event(self)
+        self.load = Event(self)
+        self.transform = Event(self)
+
     def _start(self):
         self.item_exporter.open()
 
@@ -37,6 +45,7 @@ class ExportGethTracesJob(BaseJob):
             self._export_batch,
             total_items=self.end_block - self.start_block + 1
         )
+        self.export_all('export_geth_traces')
 
     def _export_batch(self, block_number_batch):
         trace_block_rpc = list(generate_trace_block_by_number_json_rpc(block_number_batch))

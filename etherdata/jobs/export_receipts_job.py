@@ -6,7 +6,7 @@ from etherdata.utility.json_rpc_requests import generate_get_receipt_json_rpc
 from etherdata.mappers.receipt_log_mapper import EthReceiptLogMapper
 from etherdata.mappers.receipt_mapper import EthReceiptMapper
 from etherdata.utility.utils import rpc_response_batch_to_results
-
+from axel import Event
 
 # Exports receipts and logs
 class ExportReceiptsJob(BaseJob):
@@ -33,11 +33,19 @@ class ExportReceiptsJob(BaseJob):
         self.receipt_mapper = EthReceiptMapper()
         self.receipt_log_mapper = EthReceiptLogMapper()
 
+        self.export_all = Event(self)
+        self.load_all = Event(self)
+        self.transform_all = Event(self)
+        self.export = Event(self)
+        self.load = Event(self)
+        self.transform = Event(self)
+
     def _start(self):
         self.item_exporter.open()
 
     def _export(self):
         self.batch_work_executor.execute(self.transaction_hashes_iterable, self._export_receipts)
+        self.export_all('export_receipts')
 
     def _export_receipts(self, transaction_hashes):
         receipts_rpc = list(generate_get_receipt_json_rpc(transaction_hashes))

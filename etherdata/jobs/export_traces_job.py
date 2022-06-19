@@ -9,7 +9,7 @@ from etherdata.service.eth_special_trace_service import EthSpecialTraceService
 from etherdata.service.trace_id_calculator import calculate_trace_ids
 from etherdata.service.trace_status_calculator import calculate_trace_statuses
 from etherdata.utility.utils import validate_range
-
+from axel import Event
 
 class ExportTracesJob(BaseJob):
     def __init__(
@@ -37,6 +37,13 @@ class ExportTracesJob(BaseJob):
         self.include_genesis_traces = include_genesis_traces
         self.include_daofork_traces = include_daofork_traces
 
+        self.export_all = Event(self)
+        self.load_all = Event(self)
+        self.transform_all = Event(self)
+        self.export = Event(self)
+        self.load = Event(self)
+        self.transform = Event(self)
+
     def _start(self):
         self.item_exporter.open()
 
@@ -46,6 +53,7 @@ class ExportTracesJob(BaseJob):
             self._export_batch,
             total_items=self.end_block - self.start_block + 1
         )
+        self.export_all('extract_parity_traces')
 
     def _export_batch(self, block_number_batch):
         assert len(block_number_batch) == 1
